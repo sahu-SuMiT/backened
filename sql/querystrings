@@ -1,0 +1,84 @@
+sCREATE DATABASE IF NOT EXISTS instagram;
+DROP DATABASE IF EXISTS instagram;
+
+SHOW DATABASES;
+
+USE instagram;
+SHOW TABLES;
+drop table user;
+CREATE TABLE user(
+	Id INT,
+    age INT,
+    Name VARCHAR(30) NOT NULL,
+    Email varchar(50) UNIQUE,
+    Followers INT DEFAULT 0,
+    Following INT,
+    CONSTRAINT CHECK (age >=13),
+    PRIMARY KEY (id)
+);
+INSERT INTO user
+(id,age,name,email,followers,following)
+VALUES
+(1, 14, "adam", "adam@yahoo.in", 123, 145),
+(2, 15, "bob", "bob123@gmail.com", 200, 200),
+(3, 16, "casey", "casey@gmail.com", 300, 306),
+(4, 17, "donald", "donald@gmail.com", 200, 105);
+
+INSERT INTO user
+(id,age,name,email,followers, following)
+VALUES
+(5,14,"eve","eve@yahoo.in.com",400,145),
+(6,16,"farah","farah@gmail.com",10000,1000);
+SELECT * FROM user;
+INSERT INTO user
+(id,name,email,following,city)
+VALUES
+(10,"mahatma","mahi@google.com",1003,323);
+
+SELECT age, max(followers)
+FROM user
+GROUP BY age
+HAVING max(followers) > 200
+ORDER BY age desc;
+
+SET SQL_SAFE_UPDATES = 0;
+UPDATE user 
+SET followers = 600
+where age = 16;
+DELETE FROM user 
+WHERE age = 14;
+
+ALTER TABLE user
+ADD COLUMN city VARCHAR(25) DEFAULT "Delhi";
+
+ALTER TABLE user
+DROP COLUMN age;
+
+ALTER TABLE user
+RENAME TO instaUser;
+
+ALTER TABLE instaUser
+CHANGE COLUMN followers subs INT DEFAULT 0;
+select * from instaUser;
+
+ALTER TABLE instaUser
+MODIFY subs INT DEFAULT 5;
+ALTER TABLE instaUser
+RENAME TO user;
+TRUNCATE TABLE user;
+
+CREATE TABLE posts(
+	id INT PRIMARY KEY,
+    content VARCHAR(100),
+    user_id INT,
+    FOREIGN KEY(user_id) REFERENCES user(id)
+);
+
+INSERT INTO posts
+(id,content,user_id)
+VALUES
+(1,"Hello World",3),
+(2,"Bye Bye",1),
+(3,"Hello Delta",3); 
+
+select * from posts
